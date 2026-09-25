@@ -2,6 +2,8 @@
 
 *Print-ready official letters in Bahasa Indonesia and English.*
 
+**Live demo:** https://sahidprasetyo.github.io/suratin/
+
 Fill in a form, watch a live A4 preview, and print or save as PDF. It has no backend and no accounts, and your letter stays in your browser.
 
 ## Features
@@ -35,11 +37,21 @@ pnpm dev          # http://localhost:5173
 | -------------- | ------------------------------------------------------ |
 | `pnpm dev`     | Start the Vite dev server                              |
 | `pnpm build`   | Type-check (`tsc -b`) and build to `dist/`             |
-| `pnpm preview` | Serve the production build locally                     |
+| `pnpm preview` | Serve the production build at `/suratin/`              |
 | `pnpm test`    | Run the Vitest suite                                   |
 | `pnpm lint`    | Run ESLint                                             |
 
-The build output in `dist/` is static files, so any static host can serve it.
+The build output in `dist/` is static files. Production builds use the base path `/suratin/` (set in `vite.config.ts`); change it to `/` to host at a domain root.
+
+### Deployment
+
+Every push to `main` runs `.github/workflows/deploy.yml`, which lints, tests, builds and publishes the site to GitHub Pages. A failing check stops the deploy. The workflow:
+
+- pins each action to a full commit SHA, so a moved tag can't change what runs
+- gives the build job read-only access; only the deploy job can write to Pages
+- installs the exact pnpm version pinned in `package.json` via Corepack, with a frozen lockfile
+
+One-time setup: in the repository's **Settings → Pages**, set **Source** to **GitHub Actions**. Deploys can also be started manually from the **Actions** tab (*Run workflow*).
 
 ### Printing and saving as PDF
 
